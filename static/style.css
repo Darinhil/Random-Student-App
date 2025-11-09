@@ -1,4 +1,3 @@
-/* ===================== GLOBAL ===================== */
 body {
   margin: 0;
   font-family: Arial, sans-serif;
@@ -6,7 +5,6 @@ body {
   color: white;
 }
 
-/* ===================== NAVBAR ===================== */
 .navbar {
   display: flex;
   justify-content: space-between;
@@ -53,40 +51,16 @@ body {
   color: #2e89ff;
 }
 
-/* Responsive Navbar */
-@media (max-width: 1024px) {
-  .navbar {
-    flex-direction: column;
-    align-items: flex-start;
-  }
-
-  .main-nav {
-    margin-top: 10px;
-    width: 100%;
-  }
-
-  .main-nav ul {
-    flex-direction: column;
-    width: 100%;
-  }
-
-  .main-nav li {
-    margin: 5px 0;
-  }
-}
-
-/* ===================== HEADER ===================== */
 .header {
   padding: 0;
   color: #fff;
   text-align: center;
 }
 
-/* ===================== WHEEL SECTION ===================== */
 .grub {
   display: flex;
   justify-content: space-evenly;
-  flex-wrap: wrap; /* Allows wrapping on smaller screens */
+  flex-wrap: wrap;
   margin-top: 20px;
 }
 
@@ -95,7 +69,7 @@ body {
   justify-content: center;
   position: relative;
   margin: 20px 0;
-  flex: 1 1 400px; /* Grow/shrink with min width */
+  flex: 1 1 400px;
   max-width: 500px;
 }
 
@@ -122,11 +96,10 @@ body {
   transform: translateY(-50%);
 }
 
-/* ===================== INPUT AREA ===================== */
 .inputArea {
   display: flex;
   justify-content: center;
-  flex: 1 1 300px; /* grow/shrink with min width */
+  flex: 1 1 300px;
   max-width: 400px;
   margin: 20px 10px;
 }
@@ -143,7 +116,6 @@ textarea {
   min-height: 300px;
 }
 
-/* ===================== WINNER MODAL ===================== */
 .modal {
   display: none;
   position: fixed;
@@ -165,7 +137,7 @@ textarea {
   background: linear-gradient(135deg, #ffffff, #e9f5ff);
   border-radius: 20px;
   width: 420px;
-  max-width: 100%; /* Ensure fits on mobile */
+  max-width: 100%;
   text-align: center;
   overflow: hidden;
   box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
@@ -233,7 +205,6 @@ textarea {
   background-color: #0056d6;
 }
 
-/* ===================== ANIMATIONS ===================== */
 .animate-pop {
   animation: popIn 0.6s ease-out;
 }
@@ -258,7 +229,6 @@ textarea {
   }
 }
 
-/* ===================== CONFETTI CANVAS ===================== */
 #confettiCanvas {
   position: absolute;
   top: 0;
@@ -266,7 +236,6 @@ textarea {
   pointer-events: none;
 }
 
-/* ===================== MEDIA QUERIES ===================== */
 @media (max-width: 768px) {
   .grub {
     flex-direction: column;

@@ -1,16 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
     <link rel="stylesheet" href="../static/Style1.css">
-</head>
-<body>
-
-</body>
-</html>
-
 </head>
 
 <body>
@@ -30,46 +25,45 @@
     </div>
 
     <div class="con">
+        <div class="card">
+            <h3>Participant List</h3>
+            <textarea id="participants" placeholder="Enter participant names (one per line or separated by commas)"></textarea>
+            <div class="participant-count" id="count">0 participants</div>
 
-
-    <div class="card">
-        <h3>Participant List</h3>
-        <textarea id="participants" placeholder="Enter participant names (one per line or separated by commas)"></textarea>
-        <div class="participant-count" id="count">0 participants</div>
-
-        <div class="options">
-            <div class="option-header">Group Formation Options</div>
-            <div class="radio-group">
-                <label><input type="radio" name="mode" id="byTeams" checked> Number of Teams</label>
-                <label><input type="radio" name="mode" id="byParticipants"> Participants per Team</label>
-            </div>
-
-            <div class="switches">
-                <div class="switch-group">
-                    <label>Team Leaders</label>
-                    <label class="switch">
-                        <input type="checkbox" id="teamLeaders">
-                        <span class="slider"></span>
-                    </label>
+            <div class="options">
+                <div class="option-header">Group Formation Options</div>
+                <div class="radio-group">
+                    <label><input type="radio" name="mode" id="byTeams" checked> Number of Teams</label>
+                    <label><input type="radio" name="mode" id="byParticipants"> Participants per Team</label>
                 </div>
-                <div class="switch-group">
-                    <label>Random Team Names</label>
-                    <label class="switch">
-                        <input type="checkbox" id="randomNames">
-                        <span class="slider"></span>
-                    </label>
+
+                <div class="switches">
+                    <div class="switch-group">
+                        <label>Team Leaders</label>
+                        <label class="switch">
+                            <input type="checkbox" id="teamLeaders">
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                    <div class="switch-group">
+                        <label>Random Team Names</label>
+                        <label class="switch">
+                            <input type="checkbox" id="randomNames">
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                </div>
+
+                <div style="margin-top:15px;">
+                    <input type="number" id="numInput" min="2" value="2">
                 </div>
             </div>
 
-            <div style="margin-top:15px;">
-                <input type="number" id="numInput" min="2" value="2">
-            </div>
+            <button class="btn" id="generateBtn">Generate Teams</button>
+            <button class="discover">Random Student App</button>
         </div>
+    </div>
 
-        <button class="btn" id="generateBtn">Generate Teams</button>
-        <button class="discover">Random Student App</button>
-    </div>
-    </div>
     <script>
         const participantsInput = document.getElementById('participants');
         const countDisplay = document.getElementById('count');
@@ -105,4 +99,5 @@
         });
     </script>
 </body>
+
 </html>
