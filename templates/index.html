@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Random Student App</title>
+  <link rel="stylesheet" href="../static/style.css">
+</head>
+<body>
+
+  <div class="navbar">
+    <div class="logo-container">
+      <img src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" alt="My Logo" class="logo">
+      <h2 class="title">Random Student App</h2>
+    </div>
+    
+    <nav class="main-nav">
+      <ul>
+        <li><a href="./index.html">Spinner</a></li>
+        <li><a href="./Groub.html">Groub</a></li>
+        <li><a href="./R.picture.html">R.Picture</a></li>
+      </ul>
+    </nav>
+  </div>
+
+  <div class="header">
+    <h1>STUDENT PICKER</h1>
+    <p id="winner"></p>
+  </div>
+
+  <div class="grub">
+    <div class="wheel">
+      <canvas id="canvas" width="500" height="500"></canvas>
+      <div class="center-circle" onclick="spin()">
+        <div class="triangle"></div>
+      </div>
+    </div>
+
+    <div class="inputArea">
+      <textarea rows="20" cols="30" oninput="createWheel()">niel
+joe
+markey
+van
+vak
+sheyy
+</textarea>
+    </div>
+  </div>
+
+  <!-- Winner Modal -->
+  <div id="winnerModal" class="modal">
+    <div class="modal-content animate-pop">
+      <div class="modal-header">
+        <h2>🎉 We Have a Winner! 🎉</h2>
+      </div>
+      <div class="modal-body">
+        <h1 id="winnerName">Name</h1>
+        <p class="winner-sub">Congratulations!</p>
+        <canvas id="confettiCanvas"></canvas>
+      </div>
+      <div class="modal-footer">
+        <button class="close-btn" onclick="closeModal()">Close</button>
+        <button class="remove-btn" onclick="removeWinner()">Remove</button>
+      </div>
+    </div>
+  </div>
+<script src="../static/script.js"></script>
+</body>
+</html>

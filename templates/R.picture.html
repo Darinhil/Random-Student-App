@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Random Wheel with Images</title>
+<style>
+     body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background-color: #121212;
+      color: #121212;
+    }
+
+    /* Navbar */
+    .navbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background-color: #333;
+      color: white;
+      padding: 10px 20px;
+    }
+
+    .logo-container {
+      display: flex;
+      align-items: center;
+    }
+
+    .logo {
+      height: 60px;
+      margin-right: 8px;
+    }
+
+    .title {
+      font-size: 20px;
+      margin: 0;
+    }
+
+    .main-nav ul {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      display: flex;
+    }
+
+    .main-nav li {
+      margin: 0 15px;
+    }
+
+    .main-nav a {
+      color: white;
+      text-decoration: none;
+      padding: 5px 10px;
+      transition: color 0.3s;
+    }
+
+    .main-nav a:hover {
+      color: #2e89ff;
+    }
+/* ===================== Layout ===================== */
+.con {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 30px;
+  flex-wrap: wrap;
+  margin: 20px 10px;
+}
+
+.left {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.controls {
+  width: 320px;
+  max-width: 90vw;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.controls input[type="text"],
+.controls input[type="file"] {
+  width: 100%;
+  padding: 8px 10px;
+  font-size: 14px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+}
+
+.controls button {
+  padding: 10px 12px;
+  font-size: 15px;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  background: #2563eb;
+  color: white;
+  box-shadow: 0 6px 14px rgba(37, 99, 235, 0.18);
+  transition: background 0.3s;
+}
+
+.controls button:hover {
+  background: #1d4ed8;
+}
+
+.clear-btn {
+  background: #ef4444;
+}
+
+.list {
+  border-radius: 8px;
+  padding: 10px;
+  background: #fff;
+  color: #000;
+  box-shadow: 0 4px 12px rgba(12, 20, 40, 0.05);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+.item {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.item img {
+  width: 48px;
+  height: 48px;
+  border-radius: 6px;
+  object-fit: cover;
+  border: 1px solid #eee;
+}
+
+/* ===================== Wheel ===================== */
+:root {
+  --wheel-size: 520px;
+}
+
+#wheelWrap {
+  width: var(--wheel-size);
+  height: var(--wheel-size);
+  display: grid;
+  place-items: center;
+  position: relative;
+}
+
+canvas {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  box-shadow: 0 8px 30px rgba(8, 20, 40, 0.12);
+  background: #fff;
+  transition: transform 0s;
+  will-change: transform;
+}
+
+.pointer {
+  position: absolute;
+  top: 6px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 0;
+  height: 0;
+  border-left: 14px solid transparent;
+  border-right: 14px solid transparent;
+  border-bottom: 22px solid #ff3b30;
+  filter: drop-shadow(0 2px 3px rgba(0,0,0,0.18));
+  z-index: 3;
+}
+
+/* ===================== Result Overlay ===================== */
+.result-screen {
+  position: absolute;
+  top:0; left:0;
+  width:100%; height:100%;
+  background: linear-gradient(135deg, #fceabb, #f8b500, #ff4e50, #1f4037);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  border-radius: 50%;
+  text-align: center;
+  z-index:10;
+  display:none;
+  transform: scale(0);
+  transition: transform 0.5s cubic-bezier(0.68,-0.55,0.27,1.55);
+  overflow: hidden;
+}
+
+.result-screen.show { transform: scale(1); }
+
+.result-screen img {
+  width: 220px;
+  height: 220px;
+  border-radius: 16px;
+  object-fit: cover;
+  margin-bottom: 20px;
+  box-shadow: 0 12px 28px rgba(0,0,0,0.35);
+  border: 4px solid #fff;
+  transform: scale(0);
+  animation: popIn 0.5s forwards 0.2s;
+}
+
+.result-screen h2 {
+  margin:0 0 16px;
+  font-size:24px;
+  color:#fff;
+  text-shadow: 0 4px 12px rgba(0,0,0,0.6);
+  transform: translateY(-20px);
+  opacity:0;
+  animation: slideIn 0.5s forwards 0.4s;
+}
+
+.result-screen button {
+  background:#2563eb;
+  color:white;
+  border:none;
+  border-radius:12px;
+  padding:12px 22px;
+  font-size:16px;
+  cursor:pointer;
+  box-shadow:0 6px 18px rgba(37,99,235,0.35);
+  transform: translateY(20px);
+  opacity:0;
+  animation: slideIn 0.5s forwards 0.6s;
+}
+
+.result-screen button:hover { background:#1d4ed8; }
+
+/* ===================== Animations ===================== */
+@keyframes popIn {
+  0%{ transform: scale(0); }
+  70%{ transform: scale(1.2); }
+  100%{ transform: scale(1); }
+}
+
+@keyframes slideIn {
+  to { transform: translateY(0); opacity:1; }
+}
+
+/* ===================== Confetti ===================== */
+.confetti {
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  background: red;
+  opacity: 0.9;
+  pointer-events: none;
+  z-index: 20;
+  border-radius: 50%;
+  animation: fall 2s linear forwards;
+}
+
+@keyframes fall {
+  0%{ transform: translateY(0) rotate(0deg); opacity:1; }
+  100%{ transform: translateY(600px) rotate(720deg); opacity:0; }
+}
+
+/* ===================== Responsive ===================== */
+@media (max-width: 1200px) { :root{--wheel-size:420px;} }
+@media (max-width: 992px) { :root{--wheel-size:360px;} }
+@media (max-width: 768px){
+  .con { flex-direction: column; align-items: center; gap:20px; }
+  .controls { width: 90%; }
+  .pointer { border-left: 10px solid transparent; border-right: 10px solid transparent; border-bottom: 18px solid #ff3b30; }
+  .result-screen img { width: 70%; height:auto; }
+  .result-screen h2 { font-size: 20px; }
+  .result-screen button { font-size: 14px; padding: 10px 18px; }
+}
+@media (max-width: 480px){
+  :root{--wheel-size:240px;}
+  .pointer { border-left: 8px solid transparent; border-right: 8px solid transparent; border-bottom: 14px solid #ff3b30; }
+  .controls button { font-size: 13px; padding: 8px 12px; }
+}
+
+</style>
+</head>
+<body>
+  <div class="navbar">
+    <div class="logo-container">
+      <img src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" alt="Logo" class="logo">
+      <h2 class="title">Random Student App</h2>
+    </div>
+    <nav class="main-nav">
+      <ul>
+        <li><a href="./index.html">Spinner</a></li>
+        <li><a href="./Groub.html">Groub</a></li>
+        <li><a href="R.picture.html">R.Picture</a></li>
+      </ul>
+    </nav>
+  </div>
+
+  <div class="con">
+    <div class="left">
+      <div id="wheelWrap">
+        <div class="pointer" title="Pointer"></div>
+        <canvas id="wheel" width="1040" height="1040"></canvas>
+
+        <div id="resultScreen" class="result-screen">
+          <img id="resultImage" src="" alt="Winner">
+          <h2 id="resultName">Winner</h2>
+          <button id="removeBtn">Remove & Continue</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="controls">
+      <label class="small">Upload images (multiple):</label>
+      <input id="fileInput" type="file" accept="image/*" multiple>
+      <label class="small">Or add image URL:</label>
+      <div style="display:flex; gap:8px">
+        <input id="urlInput" type="text" placeholder="https://example.com/img.jpg">
+        <button id="addUrl">Add</button>
+      </div>
+      <div style="display:flex; gap:8px">
+        <button id="spinBtn">Spin</button>
+        <button id="clearBtn" style="background:#ef4444">Clear</button>
+      </div>
+      <div class="list" id="imagesList" aria-live="polite">
+        <div class="small">No images yet.</div>
+      </div>
+      <div class="small" id="result" style="margin-top:8px; font-weight:600"></div>
+    </div>
+  </div>
+
+  <script>
+    const canvas = document.getElementById("wheel");
+    const ctx = canvas.getContext("2d", { alpha:true });
+    const DPR = window.devicePixelRatio || 1;
+    const spinBtn = document.getElementById("spinBtn");
+    const fileInput = document.getElementById("fileInput");
+    const addUrlBtn = document.getElementById("addUrl");
+    const urlInput = document.getElementById("urlInput");
+    const imagesList = document.getElementById("imagesList");
+    const clearBtn = document.getElementById("clearBtn");
+    const resultEl = document.getElementById("result");
+    const resultScreen = document.getElementById("resultScreen");
+    const resultImage = document.getElementById("resultImage");
+    const resultName = document.getElementById("resultName");
+    const removeBtn = document.getElementById("removeBtn");
+
+    let images = [], rotation = 0, isSpinning=false, lastLandedIndex=null;
+
+    function resizeCanvas(){
+      const rect = canvas.getBoundingClientRect();
+      canvas.width = rect.width * DPR;
+      canvas.height = rect.height * DPR;
+      ctx.setTransform(DPR,0,0,DPR,0,0);
+      drawWheel();
+    }
+
+    window.addEventListener("resize", debounce(resizeCanvas, 120));
+
+    fileInput.addEventListener("change", e => {
+      const files = Array.from(e.target.files);
+      if(!files.length) return;
+      let pending = files.length;
+      files.forEach(file=>{
+        const reader = new FileReader();
+        reader.onload = ev=>{
+          const img = new Image();
+          img.onload = ()=>{
+            images.push({img, name:file.name});
+            updateList(); drawWheel();
+            pending--; if(pending===0) fileInput.value="";
+          };
+          img.src = ev.target.result;
+        };
+        reader.readAsDataURL(file);
+      });
+    });
+
+    addUrlBtn.addEventListener("click", ()=>{
+      const url = urlInput.value.trim();
+      if(!url) return;
+      const img = new Image();
+      img.crossOrigin="anonymous";
+      img.onload = ()=>{
+        images.push({img, name:url.split("/").pop()||"image"});
+        updateList(); drawWheel();
+        urlInput.value="";
+      };
+      img.onerror=()=>alert("Failed to load image URL.");
+      img.src=url;
+    });
+
+    clearBtn.addEventListener("click", ()=>{
+      images=[]; rotation=0; lastLandedIndex=null;
+      canvas.style.transition="none"; canvas.style.transform=`rotate(0deg)`;
+      updateList(); drawWheel(); resultEl.textContent="";
+      hideResultScreen();
+    });
+
+    function updateList(){
+      imagesList.innerHTML="";
+      if(images.length===0){
+        imagesList.innerHTML='<div class="small">No images yet.</div>';
+        return;
+      }
+      images.forEach((it, idx)=>{
+        const div=document.createElement("div"); div.className="item";
+        const im=document.createElement("img"); im.src=it.img.src;
+        const span=document.createElement("div");
+        span.innerHTML=`<div style="font-weight:600">${it.name}</div><div class="small">Slice ${idx+1}</div>`;
+        const remove=document.createElement("button"); remove.textContent="Remove"; remove.style.marginLeft="auto";
+        remove.onclick=()=>{ images.splice(idx,1); updateList(); drawWheel(); };
+        div.appendChild(im); div.appendChild(span); div.appendChild(remove);
+        imagesList.appendChild(div);
+      });
+    }
+
+    function drawWheel(){
+      const w=canvas.clientWidth, h=canvas.clientHeight, cx=w/2, cy=h/2;
+      const radius=Math.min(w,h)/2-6;
+      ctx.clearRect(0,0,w,h);
+      const n=Math.max(1,images.length);
+      const sliceAngle=(Math.PI*2)/n;
+
+      for(let i=0;i<n;i++){
+        const start=i*sliceAngle-Math.PI/2, end=start+sliceAngle;
+        ctx.fillStyle=i===lastLandedIndex?"#fffbcc":i%2===0?"#f8fafc":"#eef2ff";
+        ctx.beginPath(); ctx.moveTo(cx,cy); ctx.arc(cx,cy,radius,start,end); ctx.closePath(); ctx.fill();
+        ctx.strokeStyle="#e6e9ef"; ctx.lineWidth=1; ctx.stroke();
+
+        if(images[i]){
+          const mid=(start+end)/2;
+          ctx.save(); ctx.beginPath(); ctx.moveTo(cx,cy); ctx.arc(cx,cy,radius,start,end); ctx.closePath(); ctx.clip();
+          const img=images[i].img;
+          const rpos=radius*0.58; const px=cx+Math.cos(mid)*rpos; const py=cy+Math.sin(mid)*rpos;
+          const maxW=radius*0.6, maxH=radius*0.6;
+          let scale=Math.min(maxW/img.width,maxH/img.height,1);
+          ctx.translate(px,py); ctx.rotate(mid+Math.PI/2);
+          ctx.drawImage(img,(-img.width*scale)/2,(-img.height*scale)/2,img.width*scale,img.height*scale);
+          ctx.restore();
+        }
+      }
+      ctx.beginPath(); ctx.arc(cx,cy,radius*0.16,0,Math.PI*2); ctx.fillStyle="#ffffff"; ctx.fill();
+      ctx.strokeStyle="#ccc"; ctx.stroke();
+    }
+
+    spinBtn.addEventListener("click", ()=>{
+      if(isSpinning) return;
+      if(images.length===0){ alert("Add at least one image."); return; }
+
+      hideResultScreen(); isSpinning=true; resultEl.textContent="";
+      const minTurns=4, maxTurns=8, extraDegrees=Math.random()*360;
+      const turns=Math.floor(minTurns+Math.random()*(maxTurns-minTurns));
+      const finalDeg=turns*360+extraDegrees;
+
+      canvas.style.transition="transform 5s cubic-bezier(0.18,0.89,0.32,1)";
+      rotation=(rotation+finalDeg)%360000;
+      canvas.style.transform=`rotate(${rotation}deg)`;
+
+      function onEnd(){
+        canvas.removeEventListener("transitionend",onEnd);
+        const landedIdx=computeLandedIndex(rotation);
+        lastLandedIndex=landedIdx;
+        const landed=images[landedIdx];
+        resultEl.textContent=`Landed: ${landed?landed.name:"Item "+(landedIdx+1)}`;
+        isSpinning=false; rotation=rotation%360;
+        canvas.style.transition="none"; canvas.style.transform=`rotate(${rotation}deg)`;
+        drawWheel();
+        showResultScreen(landed);
+      }
+      canvas.addEventListener("transitionend",onEnd);
+    });
+
+    function computeLandedIndex(rotationDeg){
+      const n=Math.max(1,images.length);
+      const pointer=270;
+      const wheelAngle=(((pointer-rotationDeg)%360)+360)%360;
+      const wheelAngleRad=(wheelAngle*Math.PI)/180;
+      const startOffset=-Math.PI/2;
+      let angFromStart=wheelAngleRad-startOffset;
+      angFromStart=((angFromStart%(Math.PI*2))+Math.PI*2)%(Math.PI*2);
+      return Math.floor(angFromStart/((Math.PI*2)/n))%n;
+    }
+
+    function showResultScreen(landed){
+      if(!landed) return;
+      resultImage.src=landed.img.src;
+      resultName.textContent=landed.name;
+
+      // reset animation
+      resultScreen.classList.remove("show");
+      void resultScreen.offsetWidth;
+      resultScreen.style.display="flex";
+      resultScreen.classList.add("show");
+
+      // create confetti
+      for(let i=0;i<50;i++){
+        const conf=document.createElement("div");
+        conf.className="confetti";
+        conf.style.background=`hsl(${Math.random()*360}, 90%, 60%)`;
+        conf.style.left=`${Math.random()*100}%`;
+        conf.style.animationDuration=`${1+Math.random()*1.5}s`;
+        resultScreen.appendChild(conf);
+        setTimeout(()=>{ conf.remove(); },2000);
+      }
+    }
+
+    function hideResultScreen(){
+      resultScreen.style.display="none";
+      resultScreen.classList.remove("show");
+    }
+
+    removeBtn.addEventListener("click",()=>{
+      if(lastLandedIndex!=null){
+        images.splice(lastLandedIndex,1);
+        lastLandedIndex=null;
+        updateList(); drawWheel(); hideResultScreen();
+      }
+    });
+
+    function debounce(fn,t=100){ let to; return (...a)=>{ clearTimeout(to); to=setTimeout(()=>fn(...a),t); }; }
+
+    resizeCanvas(); updateList(); drawWheel();
+  </script>
+</body>
+</html>
